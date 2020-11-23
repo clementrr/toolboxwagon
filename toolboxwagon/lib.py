@@ -6,6 +6,9 @@
 from os.path import split
 import pandas as pd
 import datetime
+import sys
+import urllib.parse
+import requests
 
 pd.set_option('display.width', 200)
 
@@ -46,6 +49,14 @@ def clean_data(data):
              7: '1/trimestre', 8: 'Less', 9: 'Never'}
     data.loc[:, 'Frequency'] = data['Frequency'].map(drows)
     return data
+
+BASE_URI = "https://www.metaweather.com"
+
+def search_city(query):
+    url = f'{BASE_URI}/api/location/search/?query={query.capitalize()}'
+    response = requests.get(url).json()
+    city=response[0]
+    return city
 
 
 if __name__ == '__main__':
